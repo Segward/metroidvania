@@ -1,7 +1,9 @@
 #ifndef QUAD_H
 #define QUAD_H
 
+#include <cglm/cglm.h>
+
 void quad_init(void);
-void quad_draw(float x, float y, float z, float sx, float sy, float r, float g, float b, float a);
+void quad_draw(vec3 pos, vec2 scale, vec4 color);
 
 #endif
