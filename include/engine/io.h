@@ -1,12 +1,8 @@
 #ifndef IO_H
 #define IO_H
 
-typedef struct {
-  char *data;
-  long size;
-  int valid;
-} file_t;
+#include <engine/types.h>
 
-file_t io_file_read(const char *path);
+u32 io_file_read(const char *path, char **out_buffer);
 
 #endif

@@ -1,43 +1,54 @@
-#include <engine/global.h>
 #include <engine/render.h>
-#include <engine/quad.h>
-#include <cglm/cglm.h>
+#include <engine/global.h>
+#include <engine/time.h>
+#include <engine/physics.h>
+#include <stdlib.h>
 
-static float speed = 1.0f;
-static vec3 pos;
-
-void handle_input(float dt) {
-  vec3 dir = { 0.0f, 0.0f, 0.0f };
-  if (glfwGetKey(global.window.handle, GLFW_KEY_W) == GLFW_PRESS)
-    dir[1] += 1.0f;
-  if (glfwGetKey(global.window.handle, GLFW_KEY_S) == GLFW_PRESS) 
-    dir[1] -= 1.0f;
-  if (glfwGetKey(global.window.handle, GLFW_KEY_A) == GLFW_PRESS) 
-    dir[0] -= 1.0f;
-  if (glfwGetKey(global.window.handle, GLFW_KEY_D) == GLFW_PRESS) 
-    dir[0] += 1.0f;
-
-  if (dir[0] == 0.0f && dir[1] == 0.0f)
-    return;
-
-  glm_vec3_normalize(dir);
-  glm_vec3_muladds(dir, speed * dt, pos);
-}
-
-int main() {
+int main(void) {
   render_init();
-  double last = glfwGetTime();
+  time_init();
+  physics_init();
+
+  for (usize i = 0; i < 20; i++) {
+    usize index;
+    physics_object_create((vec2){ rand() % global.window.width, rand() % global.window.height }, 
+                          (vec2){ 100, 100 }, &index);
+    object_t *object = physics_object_get(index);
+    object->acceleration[0] = rand() % 200 - 100;
+    object->acceleration[1] = rand() % 200 - 100;
+  }
 
   while (!glfwWindowShouldClose(global.window.handle)) {
-    double now = glfwGetTime();
-    float dt = (float)(now - last);
-    last = now;
-
-    handle_input(dt);
+    time_update();
+    physics_update();
     render_begin();
-    quad_draw(pos, (vec2){0.25f, 0.25f}, (vec4){0.0f, 1.0f, 0.0f, 1.0f});
+
+    for (usize i = 0; i < 20; i++) {
+      object_t *object = physics_object_get(i);
+      render_quad((vec2){ object->aabb.position[0] , object->aabb.position[1] }, 
+                  (vec2){ 50, 50 }, (vec4){ 0.0f, 1.0f, 0.0f, 1.0f });
+
+      if (object->aabb.position[0] > global.window.width || object->aabb.position[0] < 0)
+        object->velocity[0] *= -1;
+      if (object->aabb.position[1] > global.window.height || object->aabb.position[1] < 0)
+        object->velocity[1] *= -1;
+
+      if (object->velocity[0] > 500)
+        object->velocity[0] = 500;
+      if (object->velocity[0] < -500)
+        object->velocity[0] = -500;
+
+      if (object->velocity[1] > 500)
+        object->velocity[1] = 500;
+      if (object->velocity[1] < -500)
+        object->velocity[1] = -500;
+    }
+
     render_end();
   }
+
+  glfwDestroyWindow(global.window.handle);
+  glfwTerminate();
 
   return 0;
 }

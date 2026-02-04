@@ -1,34 +1,36 @@
 #include <glad/glad.h>
 #include <engine/window.h>
-#include <engine/global.h>
 #include <engine/util.h>
+#include <engine/global.h>
 
-void window_size_callback(GLFWwindow *window, int width, int height) {
-  global.window.width = width;
-  global.window.height = height;
-}
+#define WINDOW_TITLE "metroidvania"
 
-void window_init(void) {
+void window_init(u32 width, u32 height) {
   if (!glfwInit())
-    ERROR_EXIT(1, "glfw failed initializing\n");
+    ERROR_EXIT("glfw failed to initialize");
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  GLFWwindow *handle = glfwCreateWindow(640, 480, "Topdown", NULL, NULL);
-  if (handle == NULL)
-    ERROR_EXIT(1, "glfw failed creating window\n");
+  GLFWwindow *handle = glfwCreateWindow(width, height, WINDOW_TITLE, NULL, NULL);
+  if (handle == NULL) {
+    glfwTerminate();
+    ERROR_EXIT("glfw failed to create window");
+  }
 
   glfwMakeContextCurrent(handle);
   glfwSwapInterval(0);
 
-  glfwSetWindowSizeCallback(handle, window_size_callback);
-  global.window.handle = handle;
-
-  if (!gladLoadGL())
-    ERROR_EXIT(1, "glad failed loading\n");
+  if (!gladLoadGL()) {
+    glfwTerminate();
+    ERROR_EXIT("glad failed to load");
+  }
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  global.window.handle = handle;
+  global.window.width = width;
+  global.window.height = height;
 }

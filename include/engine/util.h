@@ -4,16 +4,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ERROR_RETURN(retval, fmt, ...) \
+#define ERROR_LOG(fmt, ...) \
   do { \
-    fprintf(stderr, fmt __VA_OPT__(,) __VA_ARGS__); \
-    return retval; \
+    fprintf(stderr, "%s:%d:%s: " fmt "\n", __FILE__, __LINE__, __func__ __VA_OPT__(,) __VA_ARGS__); \
+    fflush(stderr); \
   } while (0)
 
-#define ERROR_EXIT(exit_code, fmt, ...) \
+#define ERROR_RETURN(retval, fmt, ...) \
   do { \
-    fprintf(stderr, fmt __VA_OPT__(,) __VA_ARGS__); \
-    exit(exit_code); \
+    ERROR_LOG(fmt __VA_OPT__(,) __VA_ARGS__); \
+    return (retval); \
+  } while (0)
+
+#define ERROR_EXIT(fmt, ...) \
+  do { \
+    ERROR_LOG(fmt __VA_OPT__(,) __VA_ARGS__); \
+    exit(EXIT_FAILURE); \
   } while (0)
 
 #endif

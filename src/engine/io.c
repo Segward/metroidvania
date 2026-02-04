@@ -3,41 +3,45 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-file_t io_file_read(const char *path) {
-  file_t file = { .valid = 0 };
+u32 io_file_read(const char *path, char **out_buffer) {
+  *out_buffer = NULL;
 
-  FILE *fp = fopen(path, "rb");
-  if (!fp) {
-    ERROR_RETURN(file, "fopen failed for %s\n", path);
+  FILE *file = fopen(path, "rb");
+  if (file == NULL)
+    ERROR_EXIT("failed to open %s", path);
+
+  if (fseek(file, 0, SEEK_END) != 0) {
+    fclose(file);
+    ERROR_EXIT("failed to seek end %s", path);
   }
 
-  fseek(fp, 0, SEEK_END);
-  long size = ftell(fp);
+  long size = ftell(file);
   if (size < 0) {
-    fclose(fp);
-    ERROR_RETURN(file, "ftell failed for %s\n", path);
+    fclose(file);
+    ERROR_EXIT("failed to tell size of %s", path);
   }
 
-  rewind(fp);
-
-  char *data = malloc((size_t)size);
-  if (!data && size > 0) {
-    fclose(fp);
-    ERROR_RETURN(file, "malloc failed for %s\n", path);
+  if (fseek(file, 0, SEEK_SET) != 0) {
+    fclose(file);
+    ERROR_EXIT("failed to seek set %s", path);
   }
 
-  size_t read = fread(data, 1, (size_t)size, fp);
-  if (read < (size_t)size && ferror(fp)) {
-    free(data);
-    fclose(fp);
-    ERROR_RETURN(file, "fread failed for %s\n", path);
+  char *buffer = malloc((size_t)size + 1);
+  if (buffer == NULL) {
+    fclose(file);
+    ERROR_EXIT("malloc failed for %s", path);
   }
 
-  fclose(fp);
+  size_t read = fread(buffer, 1, (size_t)size, file);
+  if (read < (size_t)size && ferror(file)) {
+    free(buffer);
+    fclose(file);
+    ERROR_EXIT("failed to read %s", path);
+  }
 
-  file.data = data;
-  file.size = (long)read;
-  file.valid = 1;
+  fclose(file);
+  buffer[read] = '\0';
 
-  return file;
+  *out_buffer = buffer;
+  return (u32)read;
 }

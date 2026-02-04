@@ -2,11 +2,11 @@
 #define GLOBAL_H
 
 #include <engine/window.h>
-#include <engine/render.h>
+#include <engine/time.h>
 
 typedef struct {
   window_t window;
-  render_t render;
+  time_t time;
 } global_t;
 
 extern global_t global;
