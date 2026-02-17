@@ -1,8 +1,8 @@
 #ifndef IO_H
 #define IO_H
 
-#include <engine/types.h>
+#include <stddef.h>
 
-u32 io_file_read(const char *path, char **out_buffer);
+size_t io_file_read(const char *path, char **out_buffer);
 
 #endif

@@ -1,8 +1,8 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
-#include <engine/types.h>
 #include <linmath.h>
+#include <stddef.h>
 
 typedef struct {
   vec2 position;
@@ -16,8 +16,8 @@ typedef struct {
 } object_t;
 
 void physics_init(void);
-u8 physics_object_create(vec2 position, vec2 size, usize *out_index);
+int physics_object_create(vec2 position, vec2 size, size_t *out_index);
 void physics_update(void);
-object_t *physics_object_get(usize index);
+object_t *physics_object_get(size_t index);
 
 #endif
