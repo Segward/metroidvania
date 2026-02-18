@@ -17,7 +17,8 @@ void vertex_add_indices(GLuint ebo, GLuint *indices, size_t size)
 void vertex_add_attribute(GLuint index, GLint size, 
                           GLsizei stride, size_t offset)
 {
-  const void *pointer = (const void *)offset;
+  const void *pointer = (const void *)(offset * sizeof(GLfloat));
+  stride = stride * sizeof(GLfloat);
   glEnableVertexAttribArray(index);
   glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride, pointer);
 }

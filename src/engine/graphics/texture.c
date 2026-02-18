@@ -3,12 +3,16 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-GLuint texture_create(const char *path)
+texture_t texture_create(const char *path)
 {
+  texture_t retval = {
+    .valid = false
+  };
+
   int width, height;
   unsigned char *data = stbi_load(path, &width, &height, NULL, STBI_rgb_alpha);
   if (!data) 
-    return 0;
+    return retval;
 
   GLuint texture;
   glGenTextures(1, &texture);
@@ -26,5 +30,10 @@ GLuint texture_create(const char *path)
   stbi_image_free(data);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  return texture;
+  retval.id = texture;
+  retval.width = width;
+  retval.height = height;
+  retval.valid = true;
+
+  return retval;
 }
