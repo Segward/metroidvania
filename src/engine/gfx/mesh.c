@@ -14,16 +14,16 @@ static void mesh_enable_attrib(GLuint index, GLint size, GLenum type, GLboolean 
 }
 
 static GLfloat quad_vertices[] = {
-   0.5f,  0.5f, 0.0f, 0.0f, 0.0f,
-   0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
-  -0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-  -0.5f,  0.5f, 0.0f, 1.0f, 0.0f
+   0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+   0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
+  -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+  -0.5f,  0.5f, 0.0f, 0.0f, 0.0f
 };
 
 static GLuint quad_indices[] = {
   0, 1, 3,
   1, 2, 3
-};
+}; 
 
 void mesh_init_quad(GLuint *vao, GLuint *vbo, GLuint *ebo) {
   glGenVertexArrays(1, vao);

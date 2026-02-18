@@ -3,6 +3,7 @@
 #include <engine/gfx/shader.h>
 #include <engine/window.h>
 #include <engine/global.h>
+#include <engine/gfx/texture.h>
 
 #include <stdio.h>
 
@@ -10,6 +11,7 @@ static GLuint quad_vao;
 static GLuint quad_vbo;
 static GLuint quad_ebo;
 static GLuint quad_shader;
+static GLuint texture;
 
 int render_init(void) {
   if (!window_init(640, 480)) {
@@ -23,6 +25,8 @@ int render_init(void) {
     fprintf(stderr, "failed to initialize quad shader\n");
     return 0;
   }
+
+  texture = texture_create("assets/texture.png");
 
   return 1;
 }
@@ -48,6 +52,11 @@ void render_quad(vec2 position, vec2 size, vec4 color) {
   glUniformMatrix4fv(glGetUniformLocation(quad_shader, "uModel"), 1, GL_FALSE, &model[0][0]);
   glUniform4fv(glGetUniformLocation(quad_shader, "uColor"), 1, color);
 
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, texture);
+
+  glUniform1i(glGetUniformLocation(quad_shader, "uTexture"), 0);
+  
   glBindVertexArray(quad_vao);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
   glBindVertexArray(0);
