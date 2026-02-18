@@ -2,7 +2,15 @@
 #define IO_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
-size_t io_file_read(const char *path, char **out_buffer);
+typedef struct file
+{
+  char *data;
+  size_t size;
+  bool valid;
+} file_t;
+
+file_t io_file_read(const char *path);
 
 #endif

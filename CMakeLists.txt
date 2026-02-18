@@ -4,9 +4,6 @@ project(metroidvania C)
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.c")
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-include_directories(
-  ${CMAKE_SOURCE_DIR}/include 
-)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   ${CMAKE_SOURCE_DIR}/include
@@ -30,4 +27,3 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND codesign --force --sign - --timestamp=none
   $<TARGET_FILE:${PROJECT_NAME}>
 )
-
