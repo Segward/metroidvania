@@ -1,7 +1,7 @@
 #include <glad/glad.h>
-#include <engine/graphics/window.h>
-#include <engine/graphics/quad.h>
-#include <engine/graphics/texture.h>
+#include <engine/window.h>
+#include <engine/quad.h>
+#include <engine/animation.h>
 #include <engine/global.h>
 
 int main(void) {
@@ -11,29 +11,26 @@ int main(void) {
   if (!quad_init())
     return 1;
 
-  texture_t sprite = texture_create("assets/sprite.png");
-  if (!sprite.valid)
-      return 1;
+  animation_t animation = animation_create("assets/sprite.png", 4, 4);
+  if (!animation.valid)
+    return 1;
 
-  int columns = 4;
-  int rows = 3;
-  int frame_index = 2;
-
-  int col = frame_index % columns;
-  int row = frame_index / columns;
-
-  float u0 = col / (float)columns;
-  float u1 = (col + 1) / (float)columns;
-  float v1 = 1.0f - (row / (float)rows);
-  float v0 = 1.0f - ((row + 1) / (float)rows);
-  vec4 uv = { u0, v0, u1, v1 };
+  double last_time = glfwGetTime();
+  double frame_delay = 0.1;
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    double current_time = glfwGetTime();
+    if (current_time - last_time >= frame_delay) {
+      animation_next(&animation);
+      last_time = current_time;
+    }
+
     quad_draw((vec2){ 400, 400 }, (vec2){ 400, 400 }, 
-              (vec4){ 1.0f, 1.0f, 1.0f, 1.0f}, sprite.id, uv);
+              (vec4){ 1.0f, 1.0f, 1.0f, 1.0f}, 
+              animation.texture.id, animation.uv);
 
     glfwSwapBuffers(global.window.handle);
     glfwPollEvents();

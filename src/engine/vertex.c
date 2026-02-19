@@ -1,4 +1,4 @@
-#include <engine/graphics/vertex.h>
+#include <engine/vertex.h>
 
 void vertex_add_vertices(GLuint vbo, GLfloat *vertices, size_t size)
 {

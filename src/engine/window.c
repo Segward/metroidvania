@@ -1,5 +1,5 @@
 #include <glad/glad.h>
-#include <engine/graphics/window.h>
+#include <engine/window.h>
 #include <engine/global.h>
 
 bool window_init(int width, int height, const char *title) 

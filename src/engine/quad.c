@@ -1,6 +1,6 @@
-#include <engine/graphics/quad.h>
-#include <engine/graphics/vertex.h>
-#include <engine/graphics/shader.h>
+#include <engine/quad.h>
+#include <engine/vertex.h>
+#include <engine/shader.h>
 #include <engine/global.h>
 #include <stdbool.h>
 
