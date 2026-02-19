@@ -10,20 +10,18 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  ${CMAKE_SOURCE_DIR}/lib/libglfw.3.dylib
-)
-
-target_link_options(${PROJECT_NAME} PRIVATE
-  "LINKER:-rpath,${CMAKE_SOURCE_DIR}/lib"
+  ${CMAKE_SOURCE_DIR}/lib/libglfw3.a
+  "-framework Cocoa"
+  "-framework IOKit"
+  "-framework CoreFoundation"
+  "-framework CoreVideo"
+  "-framework CoreGraphics"
+  "-framework Carbon"
+  "-framework QuartzCore"
+  "-framework OpenGL"
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory
   ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets
-
-  COMMAND codesign --force --sign - --timestamp=none
-  ${CMAKE_SOURCE_DIR}/lib/libglfw.3.dylib
-
-  COMMAND codesign --force --sign - --timestamp=none
-  $<TARGET_FILE:${PROJECT_NAME}>
 )
