@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.16)
 project(metroidvania C)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.c")
-
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -10,15 +9,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  ${CMAKE_SOURCE_DIR}/lib/libglfw3.a
-  "-framework Cocoa"
-  "-framework IOKit"
-  "-framework CoreFoundation"
-  "-framework CoreVideo"
-  "-framework CoreGraphics"
-  "-framework Carbon"
-  "-framework QuartzCore"
-  "-framework OpenGL"
+  ${CMAKE_SOURCE_DIR}/lib/libglfw.3.5.dylib
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
