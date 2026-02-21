@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(metroidvania C)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.c")
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   ${CMAKE_SOURCE_DIR}/include
