@@ -2,14 +2,15 @@ cmake_minimum_required(VERSION 3.16)
 project(metroidvania C)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.c")
-add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
   ${CMAKE_SOURCE_DIR}/include
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-  ${CMAKE_SOURCE_DIR}/lib/libglfw.3.5.dylib
+  ${CMAKE_SOURCE_DIR}/lib/libglfw.3.dylib
+  ${CMAKE_SOURCE_DIR}/lib/libfreetype.6.dylib
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
