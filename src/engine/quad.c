@@ -41,8 +41,8 @@ bool quad_init(void)
   return true;
 }
 
-mat4x4 model;
-mat4x4 projection;
+static mat4x4 model;
+static mat4x4 projection;
 
 void quad_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
 {
