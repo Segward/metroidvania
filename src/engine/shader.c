@@ -74,6 +74,14 @@ GLuint shader_create(const char *vs_path, const char *fs_path)
   return program;
 }
 
+void shader_delete(GLuint program)
+{
+  if (!program)
+    return;
+
+  glDeleteProgram(program);
+}
+
 void shader_update_mat4x4(GLuint program, const char *name, mat4x4 matrix)
 {
   GLint location = glGetUniformLocation(program, name);

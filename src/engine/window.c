@@ -36,3 +36,9 @@ bool window_init(int width, int height, const char *title)
 
   return true;
 }
+
+void window_close(void)
+{
+  glfwDestroyWindow(global.window.handle);
+  glfwTerminate();
+}

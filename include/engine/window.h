@@ -12,5 +12,6 @@ typedef struct window
 } window_t;
 
 bool window_init(int width, int height, const char *title);
+void window_close(void);
 
 #endif

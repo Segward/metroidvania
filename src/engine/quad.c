@@ -41,6 +41,14 @@ bool quad_init(void)
   return true;
 }
 
+void quad_delete(void)
+{
+  glDeleteBuffers(1, &ebo);
+  glDeleteBuffers(1, &vbo);
+  glDeleteVertexArrays(1, &vao);
+  glDeleteProgram(program);
+}
+
 static mat4x4 model;
 static mat4x4 projection;
 
