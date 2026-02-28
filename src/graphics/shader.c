@@ -1,6 +1,5 @@
-#include <engine/shader.h>
-#include <engine/io.h>
-#include <stdlib.h>
+#include <graphics/shader.h>
+#include <io.h>
 
 static GLuint shader_compile(GLenum type, const char *src)
 {
@@ -72,6 +71,14 @@ GLuint shader_create(const char *vs_path, const char *fs_path)
     return 0;
 
   return program;
+}
+
+void shader_use(GLuint program)
+{
+  if (!program)
+    return;
+
+  glUseProgram(program);
 }
 
 void shader_delete(GLuint program)

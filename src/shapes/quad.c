@@ -1,8 +1,10 @@
-#include <engine/quad.h>
-#include <engine/vertex.h>
-#include <engine/shader.h>
-#include <engine/global.h>
-#include <stdbool.h>
+#include <shapes/quad.h>
+#include <global.h>
+
+#include <graphics/shader.h>
+#include <graphics/vertex_array.h>
+#include <graphics/vertex_buffer.h>
+#include <graphics/index_buffer.h>
 
 static GLfloat vertices[] = {
    0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
@@ -27,26 +29,27 @@ bool quad_init(void)
   if (!program)
     return false;
 
-  glGenVertexArrays(1, &vao);
-  glGenBuffers(1, &vbo);
-  glGenBuffers(1, &ebo);
+  vertex_array_generate(&vao);
+  vertex_buffer_generate(&vbo);
+  index_buffer_generate(&ebo);
 
-  glBindVertexArray(vao);
-  vertex_add_vertices(vbo, vertices, sizeof(vertices));
-  vertex_add_indices(ebo, indices, sizeof(indices));
-  vertex_add_attribute(0, 3, 5, 0);
-  vertex_add_attribute(1, 2, 5, 3);
-  glBindVertexArray(0);
+  vertex_array_bind(vao);
+
+  vertex_buffer(vbo, vertices, sizeof(vertices));
+  index_buffer(ebo, indices, sizeof(indices));
+
+  vertex_array_attribute(0, 3, 5, 0);
+  vertex_array_attribute(1, 2, 5, 3);
 
   return true;
 }
 
 void quad_delete(void)
 {
-  glDeleteBuffers(1, &ebo);
-  glDeleteBuffers(1, &vbo);
-  glDeleteVertexArrays(1, &vao);
-  glDeleteProgram(program);
+  index_buffer_delete(&ebo);
+  vertex_buffer_delete(&vbo);
+  vertex_array_delete(&vao);
+  shader_delete(program);
 }
 
 static mat4x4 model;
@@ -59,14 +62,13 @@ void quad_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
   mat4x4_scale_aniso(model, model, size[0], size[1], 1);
   mat4x4_ortho(projection, 0, global.window.width, 0, global.window.height, -1, 1);
   
-  glUseProgram(program);
+  shader_use(program);
   shader_update_mat4x4(program, "uModel", model);
   shader_update_mat4x4(program, "uProj", projection);
   shader_update_vec4(program, "uColor", color);
   shader_update_texture(program, "uTexture", texture);
   shader_update_vec4(program, "uFrameUV", uv);
 
-  glBindVertexArray(vao);
+  vertex_array_bind(vao);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
-  glBindVertexArray(0);
 }

@@ -1,4 +1,11 @@
-#include <engine/vertex_buffer.h>
+#include <graphics/vertex_buffer.h>
+
+void vertex_buffer_generate(GLuint *vbo)
+{
+  if (!vbo) return;
+
+  glGenBuffers(1, vbo);
+}
 
 void vertex_buffer(GLuint vbo, GLfloat *data, size_t size)
 {

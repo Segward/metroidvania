@@ -1,7 +1,7 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <engine/window.h>
+#include <graphics/window.h>
 
 typedef struct {
   window_t window;

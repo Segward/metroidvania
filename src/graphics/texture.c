@@ -1,4 +1,4 @@
-#include <engine/texture.h>
+#include <graphics/texture.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -27,4 +27,12 @@ GLuint texture_create(const char *path)
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return texture;
+}
+
+void texture_delete(GLuint *texture)
+{
+  if (!texture || !*texture) return;
+
+  glDeleteTextures(1, texture);
+  *texture = 0;
 }

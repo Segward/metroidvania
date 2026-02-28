@@ -1,6 +1,4 @@
-#include <engine/io.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <io.h>
 
 file_t io_file_read(const char *path)
 {
