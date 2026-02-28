@@ -36,17 +36,20 @@ static GLuint shader_link(GLuint vs, GLuint fs)
   return program;
 }
 
-GLuint shader_create(const char *vs_path, const char *fs_path)
+bool shader_create(GLuint *program, const char *vs_path, const char *fs_path)
 {
+  if (!(program && vs_path && fs_path)) 
+    return false;
+
   file_t vs_file = io_file_read(vs_path);
-  if (!vs_file.valid)
-    return 0;
+  if (!vs_file.valid) 
+    return false;
 
   file_t fs_file = io_file_read(fs_path);
   if (!fs_file.valid)
   {
     free(vs_file.data);
-    return 0;
+    return false;
   }
 
   const char *vs_src = (const char *)vs_file.data;
@@ -57,20 +60,20 @@ GLuint shader_create(const char *vs_path, const char *fs_path)
   {
     free(vs_file.data);
     free(fs_file.data);
-    return 0;
+    return false;
   }
 
-  GLuint program = shader_link(vs, fs);
+  *program = shader_link(vs, fs);
 
   glDeleteShader(vs);
   glDeleteShader(fs);
   free(vs_file.data);
   free(fs_file.data);
 
-  if (!program)
-    return 0;
+  if (!(*program))
+    return false;
 
-  return program;
+  return true;
 }
 
 void shader_use(GLuint program)

@@ -87,8 +87,7 @@ static bool load_font_ascii(const char* font_path, int pixel_height)
 
 bool text_init(void)
 {
-  program = shader_create("assets/text.vert", "assets/text.frag");
-  if (!program)
+  if (!shader_create(&program, "assets/text.vert", "assets/text.frag"))
     return false;
 
   vertex_array_generate(&vao);

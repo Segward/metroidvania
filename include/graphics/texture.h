@@ -3,7 +3,7 @@
 
 #include <pch.h>
 
-GLuint texture_create(const char *path);
+bool texture_create(GLuint *texture, const char *path);
 void texture_delete(GLuint *texture);
 
 #endif

@@ -25,8 +25,7 @@ static GLuint program;
 
 bool quad_init(void)
 {
-  program = shader_create("assets/quad.vert", "assets/quad.frag");
-  if (!program)
+  if (!shader_create(&program, "assets/quad.vert", "assets/quad.frag"))
     return false;
 
   vertex_array_generate(&vao);

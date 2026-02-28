@@ -3,7 +3,7 @@
 
 #include <pch.h>
 
-GLuint shader_create(const char *vs_path, const char *fs_path);
+bool shader_create(GLuint *program, const char *vs_path, const char *fs_path);
 void shader_use(GLuint program);
 void shader_delete(GLuint program);
 void shader_update_mat4x4(GLuint program, const char *name, mat4x4 matrix);

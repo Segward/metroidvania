@@ -2,14 +2,16 @@
 
 void vertex_array_generate(GLuint *vao)
 {
-  if (!vao) return;
+  if (!vao) 
+    return;
 
   glGenVertexArrays(1, vao);
 }
 
 void vertex_array_bind(GLuint vao)
 {
-  if (!vao) return;
+  if (!vao) 
+    return;
 
   glBindVertexArray(vao);
 }
@@ -24,7 +26,8 @@ void vertex_array_attribute(GLuint index, GLint size, GLsizei stride, size_t off
 
 void vertex_array_delete(GLuint *vao)
 {
-  if (!(vao && *vao)) return;
+  if (!(vao && *vao)) 
+    return;
 
   glDeleteVertexArrays(1, vao);
   *vao = 0;

@@ -6,19 +6,24 @@
 #include <graphics/texture.h>
 #include <graphics/window.h>
 
-int main(void) {
+int main(void) 
+{
+  int success = 1;
+
   if (!window_init(800, 800, "metroidvania"))
-    return 1;
+    goto cleanup;
 
   if (!quad_init())
-    return 1;
+    goto cleanup;
 
   if (!text_init())
-    return 1;
+    goto cleanup;
 
-  GLuint texture = texture_create("assets/sprite.png");
-  if (!texture) 
-    return 1;
+  GLuint texture;
+  if (!texture_create(&texture, "assets/sprite.png"))
+    goto cleanup;
+
+  success = 0;
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -39,10 +44,11 @@ int main(void) {
     glfwPollEvents();
   }
 
+cleanup:
   texture_delete(&texture);
   text_delete();
   quad_delete();
   window_close();
 
-  return 0;
+  return success;
 }

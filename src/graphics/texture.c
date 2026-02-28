@@ -3,16 +3,18 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-GLuint texture_create(const char *path)
+bool texture_create(GLuint *texture, const char *path)
 {
+  if (!(texture && path)) 
+    return false;
+
   int width, height;
   unsigned char *data = stbi_load(path, &width, &height, NULL, STBI_rgb_alpha);
   if (!data) 
-    return 0;
+    return false;
 
-  GLuint texture;
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
+  glGenTextures(1, texture);
+  glBindTexture(GL_TEXTURE_2D, *texture);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -26,7 +28,7 @@ GLuint texture_create(const char *path)
   stbi_image_free(data);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  return texture;
+  return true;
 }
 
 void texture_delete(GLuint *texture)
