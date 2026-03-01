@@ -67,28 +67,30 @@ int main(void)
   while (!glfwWindowShouldClose(global.window.handle)) {
     time_update();
 
+    float speed = global.time.delta_time * 200;
+
     if (glfwGetKey(global.window.handle, GLFW_KEY_W) == GLFW_PRESS)
     {
       sprite_apply_animation(&sprite, &back);
-      vec2_add(sprite.position, sprite.position, (vec2){ 0.0f, 1.0f});
+      vec2_add(sprite.position, sprite.position, (vec2){ 0.0f, speed});
     }
 
     if (glfwGetKey(global.window.handle, GLFW_KEY_A) == GLFW_PRESS)
     {
       sprite_apply_animation(&sprite, &left);
-      vec2_add(sprite.position, sprite.position, (vec2){ -1.0f, 0.0f});
+      vec2_add(sprite.position, sprite.position, (vec2){ -speed, 0.0f});
     }
 
     if (glfwGetKey(global.window.handle, GLFW_KEY_S) == GLFW_PRESS)
     {
       sprite_apply_animation(&sprite, &front);
-      vec2_add(sprite.position, sprite.position, (vec2){ 0.0f, -1.0f});
+      vec2_add(sprite.position, sprite.position, (vec2){ 0.0f, -speed});
     }
 
     if (glfwGetKey(global.window.handle, GLFW_KEY_D) == GLFW_PRESS)
     {
       sprite_apply_animation(&sprite, &right);
-      vec2_add(sprite.position, sprite.position, (vec2){ 1.0f, 0.0f});
+      vec2_add(sprite.position, sprite.position, (vec2){ speed, 0.0f});
     }
 
     time += global.time.delta_time;

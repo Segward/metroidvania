@@ -9,7 +9,7 @@ void sprite_create(sprite_t *sprite, GLuint texture)
   sprite->texture = texture;
   sprite->animated = false;
 
-  sprite_update(sprite, (vec2){ 50.0f, 50.0f }, (vec2){ 50.0f, 50.0f });
+  sprite_update(sprite, (vec2){ 200.0f, 200.0f }, (vec2){ 100.0f, 100.0f });
 }
 
 void sprite_apply_animation(sprite_t *sprite, animation_t *animation)
