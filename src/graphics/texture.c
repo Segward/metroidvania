@@ -1,16 +1,13 @@
+#include <pch.h>
 #include <graphics/texture.h>
+#include <util/global.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-bool texture_create(GLuint *texture, const char *path)
+static bool texture_create(GLuint *texture, const char *path)
 {
-  if (!(texture && path)) 
-    return false;
-
-  int width, height;
-  unsigned char *data = stbi_load(path, &width, &height, NULL, STBI_rgb_alpha);
-  if (!data) 
+  if (!(texture && path))
     return false;
 
   glGenTextures(1, texture);
@@ -18,23 +15,39 @@ bool texture_create(GLuint *texture, const char *path)
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  int width, height, channels;
+  unsigned char *data = stbi_load(path, &width, &height, &channels, STBI_rgb_alpha);
+  if (!data)
+    return false;
 
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
   glGenerateMipmap(GL_TEXTURE_2D);
 
   stbi_image_free(data);
-  glBindTexture(GL_TEXTURE_2D, 0);
 
   return true;
 }
 
-void texture_delete(GLuint *texture)
+bool texture_init(void)
+{
+  if (!texture_create(&global.texture.sprite, "assets/sprite.png"))
+    return false;
+
+  return true;
+}
+
+static void texture_delete(GLuint *texture)
 {
   if (!texture || !*texture) return;
 
   glDeleteTextures(1, texture);
   *texture = 0;
+}
+
+void texture_cleanup(void)
+{
+  texture_delete(&global.texture.sprite);
 }

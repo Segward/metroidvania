@@ -1,9 +1,9 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <pch.h>
+#include <stdbool.h>
 
-bool texture_create(GLuint *texture, const char *path);
-void texture_delete(GLuint *texture);
+bool texture_init(void);
+void texture_cleanup(void);
 
 #endif

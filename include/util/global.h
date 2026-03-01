@@ -1,13 +1,26 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <graphics/window.h>
+#include <pch.h>
 
-typedef struct {
-  window_t window;
-  mat4x4 projection;
-} global_t;
+struct global {
+  struct {
+    GLFWwindow *handle;
+    int width;
+    int height;
+    mat4x4 projection;
+  } window;
 
-extern global_t global;
+  struct {
+    double last_time;
+    double delta_time;
+  } time;
+
+  struct {
+    GLuint sprite;
+  } texture;
+};
+
+extern struct global global;
 
 #endif
