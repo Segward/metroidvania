@@ -1,4 +1,4 @@
-#include <shapes/sprite.h>
+#include <shapes/quad.h>
 #include <util/global.h>
 
 #include <graphics/shader.h>
@@ -23,9 +23,9 @@ static GLuint vbo;
 static GLuint ebo;
 static GLuint program;
 
-bool sprite_init(void)
+bool quad_init(void)
 {
-  if (!shader_create(&program, "assets/sprite.vert", "assets/sprite.frag"))
+  if (!shader_create(&program, "assets/quad.vert", "assets/quad.frag"))
     return false;
 
   vertex_array_generate(&vao);
@@ -43,7 +43,7 @@ bool sprite_init(void)
   return true;
 }
 
-void sprite_delete(void)
+void quad_delete(void)
 {
   index_buffer_delete(&ebo);
   vertex_buffer_delete(&vbo);
@@ -52,18 +52,16 @@ void sprite_delete(void)
 }
 
 static mat4x4 model;
-static mat4x4 projection;
 
-void sprite_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
+void quad_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
 {
   mat4x4_identity(model);
   mat4x4_translate(model, position[0], position[1], 0);
   mat4x4_scale_aniso(model, model, size[0], size[1], 1);
-  mat4x4_ortho(projection, 0, global.window.width, 0, global.window.height, -1, 1);
   
   shader_use(program);
   shader_update_mat4x4(program, "uModel", model);
-  shader_update_mat4x4(program, "uProj", projection);
+  shader_update_mat4x4(program, "uProj", global.projection);
   shader_update_vec4(program, "uColor", color);
   shader_update_texture(program, "uTexture", texture);
   shader_update_vec4(program, "uFrameUV", uv);

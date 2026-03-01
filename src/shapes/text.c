@@ -133,10 +133,8 @@ static mat4x4 projection;
 
 void text_draw(const char* str, vec2 position, float scale, vec4 color)
 {
-  mat4x4_ortho(projection, 0, global.window.width, 0, global.window.height, -1, 1);
-
   shader_use(program);
-  shader_update_mat4x4(program, "uProj", projection);
+  shader_update_mat4x4(program, "uProj", global.projection);
   shader_update_vec4(program, "uColor", color);
 
   vertex_array_bind(vao);
