@@ -17,6 +17,9 @@ void sprite_apply_animation(sprite_t *sprite, animation_t *animation)
   if (!(sprite && animation))
     return;
 
+  if (animation == sprite->animation)
+    return;
+
   sprite->animation = animation; 
   sprite->animation->index = 0;
   sprite->animated = true;

@@ -2,6 +2,7 @@
 #define GLOBAL_H
 
 #include <pch.h>
+#include <model/sprite.h>
 
 struct global {
   struct {
