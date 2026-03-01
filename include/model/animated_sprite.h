@@ -3,12 +3,6 @@
 
 #include <pch.h>
 
-typedef struct uv 
-{
-  float u0, v0;
-  float u1, v1;
-} uv_t;
-
 typedef struct animated_sprite
 {
   vec2 position;
@@ -16,7 +10,7 @@ typedef struct animated_sprite
   GLuint texture;
   unsigned columns;
   unsigned rows;
-  uv_t *frames;
+  vec4s *frames;
   size_t index;
 } animated_sprite_t;
 

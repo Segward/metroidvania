@@ -28,12 +28,12 @@ void animated_sprite_frame(animated_sprite_t *sprite, unsigned column, unsigned 
   if (!sprite || sprite->columns == 0 || sprite->rows == 0)
     return;
 
-  uv_t uv;
-  uv.u0 = (float)column / (float)sprite->columns;
-  uv.v0 = (float)row / (float)sprite->rows;
-  uv.u1 = (float)(column + 1) / (float)sprite->columns;
-  uv.v1 = (float)(row + 1) / (float)sprite->rows;
+  float u0 = (float)column / (float)sprite->columns;
+  float v0 = (float)row / (float)sprite->rows;
+  float u1 = (float)(column + 1) / (float)sprite->columns;
+  float v1 = (float)(row + 1) / (float)sprite->rows;
 
+  vec4s uv = {{ u0, v0, u1, v1 }};
   arrput(sprite->frames, uv);
 }
 
@@ -66,12 +66,14 @@ void animated_sprite_draw(animated_sprite_t *sprite)
   if (arrlen(sprite->frames) == 0)
     return;
 
-  uv_t uv = sprite->frames[sprite->index];
+  vec4s uvs = sprite->frames[sprite->index];
+  vec4 uv;
+
+  memcpy(uv, &uvs, sizeof(uv));
 
   quad_draw(sprite->position, sprite->size, 
           (vec4){ 1.0f, 1.0f, 1.0f, 1.0f },
-          sprite->texture,
-          (vec4){ uv.u0, uv.v0, uv.u1, uv.v1 });
+          sprite->texture, uv);
 }
 
 void animated_sprite_delete(animated_sprite_t *sprite)
