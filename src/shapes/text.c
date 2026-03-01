@@ -1,5 +1,5 @@
 #include <shapes/text.h>
-#include <global.h>
+#include <util/global.h>
 
 #include <graphics/shader.h>
 #include <graphics/vertex_array.h>

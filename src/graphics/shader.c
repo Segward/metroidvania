@@ -1,5 +1,5 @@
 #include <graphics/shader.h>
-#include <io.h>
+#include <util/io.h>
 
 static GLuint shader_compile(GLenum type, const char *src)
 {

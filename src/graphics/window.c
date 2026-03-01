@@ -1,5 +1,5 @@
 #include <graphics/window.h>
-#include <global.h>
+#include <util/global.h>
 
 bool window_init(int width, int height, const char *title) 
 {

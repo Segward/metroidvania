@@ -1,5 +1,5 @@
-#include <shapes/quad.h>
-#include <global.h>
+#include <shapes/sprite.h>
+#include <util/global.h>
 
 #include <graphics/shader.h>
 #include <graphics/vertex_array.h>
@@ -23,9 +23,9 @@ static GLuint vbo;
 static GLuint ebo;
 static GLuint program;
 
-bool quad_init(void)
+bool sprite_init(void)
 {
-  if (!shader_create(&program, "assets/quad.vert", "assets/quad.frag"))
+  if (!shader_create(&program, "assets/sprite.vert", "assets/sprite.frag"))
     return false;
 
   vertex_array_generate(&vao);
@@ -43,7 +43,7 @@ bool quad_init(void)
   return true;
 }
 
-void quad_delete(void)
+void sprite_delete(void)
 {
   index_buffer_delete(&ebo);
   vertex_buffer_delete(&vbo);
@@ -54,7 +54,7 @@ void quad_delete(void)
 static mat4x4 model;
 static mat4x4 projection;
 
-void quad_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
+void sprite_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
 {
   mat4x4_identity(model);
   mat4x4_translate(model, position[0], position[1], 0);
