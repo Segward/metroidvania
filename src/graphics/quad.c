@@ -58,8 +58,8 @@ void quad_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
   
   shader_use(program);
   shader_update_mat4x4(program, "uModel", model);
-  shader_update_mat4x4(program, "uProj", global.window.projection);
-  shader_update_vec4(program, "uColor", color);
+  shader_update_mat4x4(program, "uProj", global.projection);
+  shader_update_vec4(program, "uColor", global.tint);
   shader_update_texture(program, "uTexture", texture);
   shader_update_vec4(program, "uFrameUV", uv);
 

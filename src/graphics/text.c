@@ -117,8 +117,8 @@ static mat4x4 projection;
 void text_draw(const char* str, vec2 position, float scale, vec4 color)
 {
   shader_use(program);
-  shader_update_mat4x4(program, "uProj", global.window.projection);
-  shader_update_vec4(program, "uColor", color);
+  shader_update_mat4x4(program, "uProj", global.projection);
+  shader_update_vec4(program, "uColor", global.tint);
 
   vertex_array_bind(vao);
 

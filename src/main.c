@@ -20,6 +20,8 @@ int main(void)
   quad_init();
   text_init();
 
+  vec4_dup(global.tint, (vec4){ 1.0f, 0.5f, 0.5f, 1.0f });
+
   texture_create(&global.texture.player, "assets/player.png");
   texture_white(&global.texture.white);
 

@@ -9,7 +9,6 @@ struct global {
     GLFWwindow *handle;
     int width;
     int height;
-    mat4x4 projection;
   } window;
 
   struct {
@@ -21,6 +20,9 @@ struct global {
     GLuint player;
     GLuint white;
   } texture;
+
+  mat4x4 projection;
+  vec4 tint;
 };
 
 extern struct global global;
