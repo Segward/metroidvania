@@ -1,4 +1,4 @@
-#include <shapes/quad.h>
+#include <graphics/quad.h>
 #include <util/global.h>
 
 #include <graphics/shader.h>
@@ -23,10 +23,9 @@ static GLuint vbo;
 static GLuint ebo;
 static GLuint program;
 
-bool quad_init(void)
+void quad_init(void)
 {
-  if (!shader_create(&program, "assets/quad.vert", "assets/quad.frag"))
-    return false;
+  shader_create(&program, "assets/quad.vert", "assets/quad.frag");
 
   vertex_array_generate(&vao);
   vertex_buffer_generate(&vbo);
@@ -39,8 +38,6 @@ bool quad_init(void)
 
   vertex_array_attribute(0, 3, 5, 0);
   vertex_array_attribute(1, 2, 5, 3);
-
-  return true;
 }
 
 void quad_delete(void)

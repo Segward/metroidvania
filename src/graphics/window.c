@@ -10,31 +10,22 @@ static void window_size_callback(GLFWwindow* window, int width, int height)
   mat4x4_ortho(global.window.projection, 0.0f, width, 0.0f, height, -1.0f, 1.0f);
 }
 
-bool window_init(int width, int height, const char *title) 
+void window_init(int width, int height, const char *title) 
 {
-  if (!glfwInit())
-    return false;
+  assert(glfwInit());
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   GLFWwindow *handle = glfwCreateWindow(width, height, title, NULL, NULL);
-  if (handle == NULL) 
-  {
-    glfwTerminate();
-    return false;
-  }
+  assert(handle);
 
   glfwMakeContextCurrent(handle);
   glfwSwapInterval(0);
+  glfwSetWindowSizeCallback(handle, window_size_callback);
 
-  if (!gladLoadGL()) 
-  {
-    glfwTerminate();
-    return false;
-  }
-
+  assert(gladLoadGL());
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
 
@@ -43,10 +34,6 @@ bool window_init(int width, int height, const char *title)
   global.window.height = height;
 
   mat4x4_ortho(global.window.projection, 0.0f, width, 0.0f, height, -1.0f, 1.0f);
-
-  glfwSetWindowSizeCallback(handle, window_size_callback);
-
-  return true;
 }
 
 void window_close(void)

@@ -3,23 +3,23 @@
 
 static GLuint shader_compile(GLenum type, const char *src)
 {
+  assert(src);
+
   GLuint shader = glCreateShader(type);
   glShaderSource(shader, 1, &src, NULL);
   glCompileShader(shader);
 
   GLint ok = 0;
   glGetShaderiv(shader, GL_COMPILE_STATUS, &ok);
-  if (!ok) 
-  {
-    glDeleteShader(shader);
-    return 0;
-  }
+  assert(ok);
 
   return shader;
 }
 
 static GLuint shader_link(GLuint vs, GLuint fs)
 {
+  assert(vs && fs);
+
   GLuint program = glCreateProgram();
   glAttachShader(program, vs);
   glAttachShader(program, fs);
@@ -27,87 +27,63 @@ static GLuint shader_link(GLuint vs, GLuint fs)
 
   GLint ok = 0;
   glGetProgramiv(program, GL_LINK_STATUS, &ok);
-  if(!ok) 
-  {
-    glDeleteProgram(program);
-    return 0;
-  }
+  assert(ok);
 
   return program;
 }
 
-bool shader_create(GLuint *program, const char *vs_path, const char *fs_path)
+void shader_create(GLuint *program, const char *vs_path, const char *fs_path)
 {
-  if (!(program && vs_path && fs_path)) 
-    return false;
+  assert(program && vs_path && fs_path);
 
   file_t vs_file = io_file_read(vs_path);
-  if (!vs_file.valid) 
-    return false;
-
   file_t fs_file = io_file_read(fs_path);
-  if (!fs_file.valid)
-  {
-    free(vs_file.data);
-    return false;
-  }
+  assert(vs_file.valid && fs_file.valid);
 
   const char *vs_src = (const char *)vs_file.data;
   const char *fs_src = (const char *)fs_file.data;
   GLuint vs = shader_compile(GL_VERTEX_SHADER, vs_src);
   GLuint fs = shader_compile(GL_FRAGMENT_SHADER, fs_src);
-  if (!(vs && fs))
-  {
-    free(vs_file.data);
-    free(fs_file.data);
-    return false;
-  }
+  assert(vs && fs);
 
   *program = shader_link(vs, fs);
+  assert(program);
 
   glDeleteShader(vs);
   glDeleteShader(fs);
   free(vs_file.data);
   free(fs_file.data);
-
-  if (!(*program))
-    return false;
-
-  return true;
 }
 
 void shader_use(GLuint program)
 {
-  if (!program)
-    return;
-
+  assert(program);
   glUseProgram(program);
 }
 
 void shader_delete(GLuint program)
 {
-  if (!program)
-    return;
-
+  assert(program);
   glDeleteProgram(program);
 }
 
 void shader_update_mat4x4(GLuint program, const char *name, mat4x4 matrix)
 {
+  assert(program && name);
   GLint location = glGetUniformLocation(program, name);
-  const GLfloat *value = (const GLfloat *)&matrix[0][0];
-  glUniformMatrix4fv(location, 1, GL_FALSE, value);
+  glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]);
 }
 
 void shader_update_vec4(GLuint program, const char *name, vec4 vector)
 {
+  assert(program && name);
   GLint location = glGetUniformLocation(program, name);
-  const GLfloat *value = (const GLfloat *)&vector[0];
-  glUniform4fv(location, 1, value);
+  glUniform4fv(location, 1, &vector[0]);
 }
 
 void shader_update_texture(GLuint program, const char *name, GLuint texture)
 {
+  assert(program && name);
   GLint location = glGetUniformLocation(program, name);
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);

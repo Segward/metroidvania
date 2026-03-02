@@ -1,9 +1,9 @@
-#include <shapes/text.h>
-#include <util/global.h>
-
+#include <graphics/text.h>
 #include <graphics/shader.h>
 #include <graphics/vertex_array.h>
 #include <graphics/vertex_buffer.h>
+
+#include <util/global.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -24,17 +24,13 @@ static GLuint vao;
 static GLuint vbo;
 static GLuint program;
 
-static bool load_font_ascii(const char* font_path, int pixel_height)
+static void load_font_ascii(const char* font_path, int pixel_height)
 {
   FT_Library ft;
-  if (FT_Init_FreeType(&ft)) return false;
+  assert(FT_Init_FreeType(&ft) == 0);
 
   FT_Face face;
-  if (FT_New_Face(ft, font_path, 0, &face)) 
-  {
-    FT_Done_FreeType(ft);
-    return false;
-  }
+  assert(FT_New_Face(ft, font_path, 0, &face) == 0); 
 
   FT_Set_Pixel_Sizes(face, 0, (FT_UInt)pixel_height);
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -65,13 +61,11 @@ static bool load_font_ascii(const char* font_path, int pixel_height)
     glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8,
-                 w, h, 0,
-                 GL_RED, GL_UNSIGNED_BYTE,
-                 g->bitmap.buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, w, h, 0, GL_RED, GL_UNSIGNED_BYTE, g->bitmap.buffer);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -82,13 +76,11 @@ static bool load_font_ascii(const char* font_path, int pixel_height)
 
   FT_Done_Face(face);
   FT_Done_FreeType(ft);
-  return true;
 }
 
-bool text_init(void)
+void text_init(void)
 {
-  if (!shader_create(&program, "assets/text.vert", "assets/text.frag"))
-    return false;
+  shader_create(&program, "assets/text.vert", "assets/text.frag");
 
   vertex_array_generate(&vao);
   vertex_buffer_generate(&vbo);
@@ -97,16 +89,7 @@ bool text_init(void)
   vertex_buffer_dynamic(vbo, sizeof(float) * 6 * 4);
   vertex_array_attribute(0, 4, 4, 0);
 
-  if (!load_font_ascii("assets/arial.ttf", 48)) 
-  {
-    text_delete();
-    return false;
-  }
-
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-  return true;
+  load_font_ascii("assets/arial.ttf", 48);
 }
 
 void text_delete(void)

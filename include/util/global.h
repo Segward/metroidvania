@@ -18,7 +18,8 @@ struct global {
   } time;
 
   struct {
-    GLuint sprite;
+    GLuint player;
+    GLuint white;
   } texture;
 };
 
