@@ -1,5 +1,6 @@
 #include <util/global.h>
 #include <util/time.h>
+#include <util/aabb.h>
 
 #include <graphics/window.h>
 #include <graphics/texture.h>
@@ -11,7 +12,6 @@
 
 static sprite_t player;
 static sprite_t ground;
-static vec2 position;
 
 int main(void) 
 {
@@ -23,7 +23,7 @@ int main(void)
   texture_create(&global.texture.player, "assets/player.png");
   texture_white(&global.texture.white);
 
-  sprite_create(&player, global.texture.player);
+  sprite_create(&player, global.texture.white);
   sprite_create(&ground, global.texture.white);
 
   vec2_dup(player.position, (vec2){ 400.0f, 400.0f });
@@ -44,6 +44,8 @@ int main(void)
       vec2_add(player.position, player.position, (vec2){ 0.0f, -speed});
     if (glfwGetKey(global.window.handle, GLFW_KEY_D) == GLFW_PRESS)
       vec2_add(player.position, player.position, (vec2){ speed, 0.0f});
+
+    aabb_collide_and_correct(player.position, player.size, ground.position, ground.size);
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
