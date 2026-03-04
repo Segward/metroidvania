@@ -81,6 +81,13 @@ void shader_update_vec4(GLuint program, const char *name, vec4 vector)
   glUniform4fv(location, 1, &vector[0]);
 }
 
+void shader_update_vec2(GLuint program, const char *name, vec2 vector)
+{
+  assert(program && name);
+  GLint location = glGetUniformLocation(program, name);
+  glUniform2fv(location, 1, &vector[0]);
+}
+
 void shader_update_texture(GLuint program, const char *name, GLuint texture)
 {
   assert(program && name);

@@ -2,7 +2,6 @@
 #define GLOBAL_H
 
 #include <pch.h>
-#include <model/sprite.h>
 
 struct global {
   struct {
@@ -21,6 +20,7 @@ struct global {
     GLuint white;
   } texture;
 
+  mat4x4 view;
   mat4x4 projection;
   vec4 tint;
 };

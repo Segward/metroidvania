@@ -7,10 +7,10 @@
 #include <graphics/index_buffer.h>
 
 static GLfloat vertices[] = {
-   0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
-   0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
-  -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
-  -0.5f,  0.5f, 0.0f, 0.0f, 0.0f
+  1.0f, 1.0f, 1.0f, 0.0f,
+  1.0f, 0.0f, 1.0f, 1.0f,
+  0.0f, 0.0f, 0.0f, 1.0f,
+  0.0f, 1.0f, 0.0f, 0.0f
 };
 
 static GLuint indices[] = {
@@ -25,7 +25,7 @@ static GLuint program;
 
 void quad_init(void)
 {
-  shader_create(&program, "assets/quad.vert", "assets/quad.frag");
+  shader_create(&program, "assets/shaders/quad.vert", "assets/shaders/quad.frag");
 
   vertex_array_generate(&vao);
   vertex_buffer_generate(&vbo);
@@ -36,8 +36,8 @@ void quad_init(void)
   vertex_buffer(vbo, vertices, sizeof(vertices));
   index_buffer(ebo, indices, sizeof(indices));
 
-  vertex_array_attribute(0, 3, 5, 0);
-  vertex_array_attribute(1, 2, 5, 3);
+  vertex_array_attribute(0, 2, 4, 0);
+  vertex_array_attribute(1, 2, 4, 2);
 }
 
 void quad_delete(void)
@@ -48,20 +48,16 @@ void quad_delete(void)
   shader_delete(program);
 }
 
-static mat4x4 model;
-
 void quad_draw(vec2 position, vec2 size, vec4 color, GLuint texture, vec4 uv)
 {
-  mat4x4_identity(model);
-  mat4x4_translate(model, position[0], position[1], 0);
-  mat4x4_scale_aniso(model, model, size[0], size[1], 1);
-  
   shader_use(program);
-  shader_update_mat4x4(program, "uModel", model);
+  shader_update_vec2(program, "uPos", position);
+  shader_update_vec2(program, "uSize", size);
   shader_update_mat4x4(program, "uProj", global.projection);
-  shader_update_vec4(program, "uColor", global.tint);
+  shader_update_mat4x4(program, "uView", global.view);
+  shader_update_vec4(program, "uUV", uv);
+  shader_update_vec4(program, "uColor", color);
   shader_update_texture(program, "uTexture", texture);
-  shader_update_vec4(program, "uFrameUV", uv);
 
   vertex_array_bind(vao);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (const void*)0);
