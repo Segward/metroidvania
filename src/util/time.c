@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <util/global.h>
+#include <global.h>
 
 void time_init(void)
 {

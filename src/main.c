@@ -1,33 +1,33 @@
-#include <util/global.h>
+#include <global.h>
 #include <util/time.h>
-
-#include <graphics/window.h>
-#include <graphics/texture.h>
-
-#include <graphics/quad.h>
-
 #include <model/object.h>
+
+#include <_graphics/_gl.h>
+#include <_graphics/_win.h>
+#include <_graphics/_quad.h>
+#include <_graphics/_tex.h>
 
 static object_t player;
 static object_t ground;
 
 int main(void) 
 {
-  window_init(800, 800, "metroidvania");
-  time_init();
+  win_init();
+  gl_init();
   quad_init();
 
-  texture_create(&global.texture.player, "assets/textures/player.png");
-  texture_white(&global.texture.white);
-  vec4_dup(global.tint, (vec4){ 1.0f, 1.0f, 1.0f, 1.0f });
+  tex_create(&global.texture.player, "assets/textures/player.png");
+  tex_create(&global.texture.grass, "assets/textures/grass.jpg");
 
   object_create(&player, global.texture.player);
   vec2_dup(player.position, (vec2){ 400.0f, 400.0f });
   vec2_dup(player.size, (vec2){ 100.0f, 100.0f });
 
-  object_create(&ground, global.texture.white);
+  object_create(&ground, global.texture.grass);
   vec2_dup(ground.position, (vec2){ 400.0f, 300.0f });
   vec2_dup(ground.size, (vec2){ 300.0f, 100.0f });
+
+  vec4_dup(global.tint, (vec4){ 1.0f, 1.0f, 1.0f, 1.0f });
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     time_update();
@@ -39,10 +39,7 @@ int main(void)
     float playerCenterY = player.position[1] + player.size[1] * 0.5f;
 
     mat4x4_identity(global.view);
-    mat4x4_translate(global.view,
-      -playerCenterX + halfW,
-      -playerCenterY + halfH,
-      0.0f);
+    mat4x4_translate(global.view, -playerCenterX + halfW, -playerCenterY + halfH, 0.0f);
 
     float speed = global.time.delta_time * 200;
     if (glfwGetKey(global.window.handle, GLFW_KEY_W) == GLFW_PRESS)
@@ -67,10 +64,10 @@ int main(void)
     glfwPollEvents();
   }
 
-  texture_delete(&global.texture.player);
-  texture_delete(&global.texture.white);
-  quad_delete();
-  window_close();
+  glDeleteTextures(1, &global.texture.player);
+  glDeleteTextures(1, &global.texture.grass);
+  quad_cleanup();
+  win_cleanup();
 
   return 0;
 }

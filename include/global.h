@@ -17,11 +17,11 @@ struct global {
 
   struct {
     GLuint player;
-    GLuint white;
+    GLuint grass;
   } texture;
 
   mat4x4 view;
-  mat4x4 projection;
+  mat4x4 proj;
   vec4 tint;
 };
 
