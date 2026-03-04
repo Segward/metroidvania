@@ -1,5 +1,5 @@
-#ifndef _GLSL_H
-#define _GLSL_H
+#ifndef GLSL_H
+#define GLSL_H
 
 #include <pch.h>
 

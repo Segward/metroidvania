@@ -1,14 +1,10 @@
 #include <global.h>
 #include <util/time.h>
-#include <model/object.h>
 
-#include <_graphics/_gl.h>
-#include <_graphics/_win.h>
-#include <_graphics/_quad.h>
-#include <_graphics/_tex.h>
-
-static object_t player;
-static object_t ground;
+#include <graphics/gl.h>
+#include <graphics/win.h>
+#include <graphics/quad.h>
+#include <graphics/tex.h>
 
 int main(void) 
 {

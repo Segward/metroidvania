@@ -2,23 +2,33 @@
 #define GLOBAL_H
 
 #include <pch.h>
+#include <model/object.h>
 
-struct global {
-  struct {
+struct global 
+{
+  struct 
+  {
     GLFWwindow *handle;
     int width;
     int height;
   } window;
 
-  struct {
+  struct 
+  {
     double last_time;
     double delta_time;
   } time;
 
-  struct {
+  struct 
+  {
     GLuint player;
     GLuint grass;
   } texture;
+
+  struct 
+  {
+    object_t *objects;
+  } world;
 
   mat4x4 view;
   mat4x4 proj;

@@ -1,5 +1,5 @@
-#ifndef _QUAD_H
-#define _QUAD_H
+#ifndef QUAD_H
+#define QUAD_H
 
 #include <pch.h>
 

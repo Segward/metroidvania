@@ -1,5 +1,5 @@
-#ifndef _TEX_H
-#define _TEX_H
+#ifndef TEX_H
+#define TEX_H
 
 #include <pch.h>
 
