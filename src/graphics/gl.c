@@ -8,4 +8,7 @@ void gl_init(void)
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
+
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_CULL_FACE);
 }

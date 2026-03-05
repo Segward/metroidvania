@@ -4,5 +4,6 @@
 #include <pch.h>
 
 void tex_create(GLuint *tex, const char *path);
+void tex_white(GLuint *tex);
 
 #endif

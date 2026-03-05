@@ -22,6 +22,7 @@ struct global
   {
     GLuint player;
     GLuint grass;
+    GLuint white;
   } texture;
 
   mat4x4 view;
