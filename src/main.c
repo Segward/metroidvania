@@ -1,67 +1,67 @@
 #include <global.h>
 #include <util/time.h>
-#include <model/object.h>
 
 #include <graphics/gl.h>
 #include <graphics/win.h>
 #include <graphics/quad.h>
-#include <graphics/iquad.h>
 #include <graphics/tex.h>
 
-static object_t player;
+static inline float frand(float a, float b)
+{
+  return a + (b - a) * ((float)rand() / (float)RAND_MAX);
+}
+
+#define PARTICLE_COUNT 100
 
 int main(void) 
 {
   win_init();
   gl_init();
   quad_init();
-  iquad_init();
 
+  mat4x4_identity(global.view);
   tex_create(&global.texture.player, "assets/textures/player.png");
   tex_create(&global.texture.grass, "assets/textures/grass.jpg");
   vec4_dup(global.tint, (vec4){ 1.0f, 1.0f, 1.0f, 1.0f });
 
-  object_create(&player, global.texture.player);
+  quad_t particles[PARTICLE_COUNT];
+
+  for (int i = 0; i < PARTICLE_COUNT; i++)
+  {
+    float s = frand(12.0f, 28.0f);
+
+    particles[i].offset[0] = frand(0.0f, global.window.width);
+    particles[i].offset[1] = frand(0.0f, global.window.height);
+
+    particles[i].size[0] = s;
+    particles[i].size[1] = s;
+
+    float a = frand(0.5f, 1.0f);
+    particles[i].color[0] = 1.0f;
+    particles[i].color[1] = 1.0f;
+    particles[i].color[2] = 1.0f;
+    particles[i].color[3] = a;
+  }
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     time_update();
 
-    float halfW = global.window.width  * 0.5f;
-    float halfH = global.window.height * 0.5f;
+    for (int i = 0; i < PARTICLE_COUNT; i++)
+    {
+      float speed = 20.0f + (1.0f - particles[i].color[3]) * 60.0f;
+      particles[i].offset[1] -= speed * global.time.delta_time;
 
-    float playerCenterX = player.pos[0] + player.size[0] * 0.5f;
-    float playerCenterY = player.pos[1] + player.size[1] * 0.5f;
-
-    mat4x4_identity(global.view);
-    mat4x4_translate(global.view, -playerCenterX + halfW, -playerCenterY + halfH, 0.0f);
-
-    float speed = global.time.delta_time * 200;
-    if (glfwGetKey(global.window.handle, GLFW_KEY_W) == GLFW_PRESS)
-      player.pos[1] += speed;
-
-    if (glfwGetKey(global.window.handle, GLFW_KEY_A) == GLFW_PRESS)
-      player.pos[0] -= speed;
-
-    if (glfwGetKey(global.window.handle, GLFW_KEY_S) == GLFW_PRESS)
-      player.pos[1] -= speed;
-
-    if (glfwGetKey(global.window.handle, GLFW_KEY_D) == GLFW_PRESS)
-      player.pos[0] += speed;
+      if (particles[i].offset[1] < -particles[i].size[1])
+      {
+        particles[i].offset[1] = global.window.height + particles[i].size[1];
+        particles[i].offset[0] = frand(0.0f, global.window.width);
+      }
+    }
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    object_draw(&player);
-
-    vec2 offsets[16] = {
-      {   0.0f,   0.0f }, {  60.0f,   0.0f }, { 120.0f,   0.0f }, { 180.0f,   0.0f },
-      {   0.0f,  60.0f }, {  60.0f,  60.0f }, { 120.0f,  60.0f }, { 180.0f,  60.0f },
-      {   0.0f, 120.0f }, {  60.0f, 120.0f }, { 120.0f, 120.0f }, { 180.0f, 120.0f },
-      {   0.0f, 180.0f }, {  60.0f, 180.0f }, { 120.0f, 180.0f }, { 180.0f, 180.0f }
-    };
-
-    iquad_draw(offsets, 16, (vec2){ 50.0f, 50.0f }, 
-               (vec4){ 1.0f, 1.0f, 1.0f, 1.0f }, global.texture.grass);
+    quad_draw(particles, global.texture.player, PARTICLE_COUNT);
 
     glfwSwapBuffers(global.window.handle);
     glfwPollEvents();
@@ -70,7 +70,6 @@ int main(void)
   glDeleteTextures(1, &global.texture.grass);
   glDeleteTextures(1, &global.texture.player);
 
-  iquad_cleanup();
   quad_cleanup();
   win_cleanup();
 

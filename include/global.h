@@ -2,7 +2,6 @@
 #define GLOBAL_H
 
 #include <pch.h>
-#include <model/object.h>
 
 struct global 
 {
@@ -24,11 +23,6 @@ struct global
     GLuint player;
     GLuint grass;
   } texture;
-
-  struct 
-  {
-    object_t *objects;
-  } world;
 
   mat4x4 view;
   mat4x4 proj;
