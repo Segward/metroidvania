@@ -23,7 +23,7 @@ struct global
     GLuint player;
     GLuint grass;
     GLuint white;
-  } texture;
+  } tex;
 
   mat4x4 view;
   mat4x4 proj;
