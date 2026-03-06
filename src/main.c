@@ -1,38 +1,35 @@
-#include <model/quad_batch.h>
-
-#include <util/time.h>
+#include <engine/model/sprite_batch.h>
+#include <engine/util/time.h>
 #include <global.h>
 
-#include <graphics/gl.h>
-#include <graphics/win.h>
-#include <graphics/quad.h>
-#include <graphics/tex.h>
+#include <engine/graphics/window.h>
+#include <engine/graphics/sprite.h>
+#include <engine/graphics/texture.h>
 
-static quad_batch_t batch;
+static sprite_batch_t grass;
+static sprite_batch_t entities;
 
 int main(void) 
 {
-  win_init();
-  gl_init();
-  quad_init();
-
-  tex_create(&global.tex.player, "assets/textures/player.png");
-  tex_create(&global.tex.grass, "assets/textures/grass.jpg");
-  tex_white(&global.tex.white);
+  window_init(800, 800, "test");
+  sprite_init();
 
   mat4x4_identity(global.view);
-  vec4_dup(global.tint, (vec4){ 1.0f, 1.0f, 1.0f, 1.0f });
 
-  quad_batch_init(&batch, global.tex.white);
-  quad_batch_push(&batch, (quad_t){ 
-    .offset = { 0.0f, 0.0f },
-    .size = { 50.0f, 50.0f },
+  texture_load_file(&global.tex.player, "assets/textures/player.png");
+  texture_load_file(&global.tex.grass, "assets/textures/grass.jpg");
+
+  sprite_batch_make(&grass, global.tex.grass);
+
+  sprite_t *sprite = sprite_batch_push(&grass, (sprite_t){
+    .offset = { 200.0f, 400.0f },
+    .size = { 400.0f, 50.0f },
     .color = { 1.0f, 1.0f, 1.0f, 1.0f }
   });
 
-  quad_batch_push(&batch, (quad_t){ 
-    .offset = { 100.0f, 50.0f },
-    .size = { 50.0f, 100.0f },
+  sprite = sprite_batch_push(&grass, (sprite_t){
+    .offset = { 600.0f, 400.0f },
+    .size = { 100.0f, 100.0f },
     .color = { 1.0f, 1.0f, 1.0f, 1.0f }
   });
 
@@ -42,20 +39,21 @@ int main(void)
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    quad_batch_draw(&batch);
+    sprite_batch_draw(&grass);
+    sprite_batch_draw(&entities);
 
     glfwSwapBuffers(global.window.handle);
     glfwPollEvents();
   }
 
-  quad_batch_cleanup(&batch);
+  sprite_batch_cleanup(&grass);
 
   glDeleteTextures(1, &global.tex.white);
   glDeleteTextures(1, &global.tex.grass);
   glDeleteTextures(1, &global.tex.player);
 
-  quad_cleanup();
-  win_cleanup();
+  sprite_cleanup();
+  window_cleanup();
 
   return 0;
 }

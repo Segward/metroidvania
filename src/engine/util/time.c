@@ -1,4 +1,5 @@
 #include <pch.h>
+#include <engine/util/time.h>
 #include <global.h>
 
 void time_init(void)

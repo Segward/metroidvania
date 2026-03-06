@@ -27,7 +27,6 @@ struct global
 
   mat4x4 view;
   mat4x4 proj;
-  vec4 tint;
 };
 
 extern struct global global;
