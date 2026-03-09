@@ -8,7 +8,7 @@ void layer_make(layer_t *layer, int index)
   layer->index = index;
 }
 
-void layer_push_sprite(layer_t *layer, sprite_t sprite, GLuint tex)
+void layer_push(layer_t *layer, sprite_t sprite, GLuint tex)
 {
   layer_entry_t *map = layer->map;
   ptrdiff_t index = hmgeti(map, tex);
@@ -32,6 +32,13 @@ void layer_draw(layer_t *layer)
     if (count > 0)
       sprite_draw(value, map[i].key, count);
   }
+}
+
+void layer_clear(layer_t *layer)
+{
+  layer_entry_t *map = layer->map;
+  for (ptrdiff_t i = 0; i < hmlen(map); i++)
+    arrsetlen(map[i].value, 0);
 }
 
 void layer_cleanup(layer_t *layer)

@@ -35,18 +35,20 @@ int main(void)
   };
 
   layer_make(&layer, 0);
-  layer_push_sprite(&layer, player, global.tex.player);
-  layer_push_sprite(&layer, grass1, global.tex.grass);
-  layer_push_sprite(&layer, grass2, global.tex.grass);
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     camera_set((vec2){ 0.0f, 0.0f });
+
+    layer_clear(&layer);
+    layer_push(&layer, player, global.tex.player);
+    layer_push(&layer, grass1, global.tex.grass);
+    layer_push(&layer, grass2, global.tex.grass);
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     layer_draw(&layer);
-
+ 
     glfwSwapBuffers(global.window.handle);
     glfwPollEvents();
   }
