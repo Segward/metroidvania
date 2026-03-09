@@ -1,6 +1,6 @@
 #include <pch.h>
-#include <engine/util/time.h>
-#include <global.h>
+#include <engine/model/time.h>
+#include <engine/model/global.h>
 
 void time_init(void)
 {

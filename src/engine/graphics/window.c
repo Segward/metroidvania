@@ -1,6 +1,6 @@
 #include <pch.h>
 #include <engine/graphics/window.h>
-#include <global.h>
+#include <engine/model/global.h>
 
 static void window_size_callback(GLFWwindow* window, int width, int height)
 {

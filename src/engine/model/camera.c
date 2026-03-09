@@ -1,5 +1,5 @@
 #include <engine/model/camera.h>
-#include <global.h>
+#include <engine/model/global.h>
 
 void camera_set(vec2 pos)
 {

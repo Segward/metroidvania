@@ -1,6 +1,6 @@
 #include <engine/graphics/sprite.h>
 #include <engine/graphics/shader.h>
-#include <global.h>
+#include <engine/model/global.h>
 
 static GLfloat vertices[] = {
   1.0f, 1.0f, 1.0f, 0.0f,
