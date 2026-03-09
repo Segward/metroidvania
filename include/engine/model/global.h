@@ -1,34 +1,21 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-#include <pch.h>
+#include <engine/graphics/window.h>
+#include <engine/graphics/texture.h>
+#include <engine/model/time.h>
+#include <engine/model/input.h>
 
-struct global 
+typedef struct global 
 {
-  struct 
-  {
-    GLFWwindow *handle;
-    int width;
-    int height;
-  } window;
-
-  struct 
-  {
-    double last_time;
-    double delta_time;
-  } time;
-
-  struct 
-  {
-    GLuint player;
-    GLuint grass;
-    GLuint white;
-  } tex;
-
+  window_t window;
+  time_t time;
+  input_t input;
+  texture_t texture;
   mat4x4 view;
   mat4x4 proj;
-};
+} global_t;
 
-extern struct global global;
+extern global_t global;
 
 #endif

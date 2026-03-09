@@ -1,3 +1,3 @@
 #include <engine/model/global.h>
 
-struct global global = {0};
+global_t global = {0};

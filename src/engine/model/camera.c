@@ -1,7 +1,7 @@
 #include <engine/model/camera.h>
 #include <engine/model/global.h>
 
-void camera_set(vec2 pos)
+void camera_update(vec2 pos)
 {
   mat4x4_identity(global.view);
 

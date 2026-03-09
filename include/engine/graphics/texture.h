@@ -10,6 +10,12 @@ typedef struct texture_data
   int height;
 } texture_data_t;
 
+typedef struct texture
+{
+  GLuint player;
+  GLuint grass;
+} texture_t;
+
 void texture_load_file(GLuint *tex, const char *path);
 void texture_make(GLuint *tex, texture_data_t *data);
 

@@ -3,6 +3,6 @@
 
 #include <pch.h>
 
-void camera_set(vec2 pos);
+void camera_update(vec2 pos);
 
 #endif

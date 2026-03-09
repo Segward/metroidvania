@@ -1,4 +1,3 @@
-#include <pch.h>
 #include <engine/graphics/window.h>
 #include <engine/model/global.h>
 
