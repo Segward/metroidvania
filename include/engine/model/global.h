@@ -4,6 +4,7 @@
 #include <engine/graphics/window.h>
 #include <engine/graphics/texture.h>
 #include <engine/model/time.h>
+#include <engine/model/camera.h>
 #include <engine/model/input.h>
 
 typedef struct global 
@@ -11,6 +12,7 @@ typedef struct global
   window_t window;
   time_t time;
   input_t input;
+  camera_t camera;
   texture_t texture;
   mat4x4 view;
   mat4x4 proj;

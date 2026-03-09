@@ -3,6 +3,7 @@
 
 void camera_update(vec2 pos)
 {
+  vec2_dup(global.camera.pos, pos);
   mat4x4_identity(global.view);
 
   float x = -pos[0] + global.window.width * 0.5f;

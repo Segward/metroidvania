@@ -8,6 +8,14 @@
 #include <engine/graphics/sprite.h>
 #include <engine/graphics/texture.h>
 
+void camera_screen_to_world(vec2 out, vec2 screen, vec2 camera)
+{
+  float flipped_y = global.window.height - screen[1];
+
+  out[0] = screen[0] + camera[0] - global.window.width * 0.5f;
+  out[1] = flipped_y + camera[1] - global.window.height * 0.5f;
+}
+
 int main(void) 
 {
   window_init(800, 800, "test");
@@ -55,6 +63,9 @@ int main(void)
 
     if (global.input.down)
       player.offset[1] -= global.time.delta * 200;
+
+    if (global.input.mouse_left)
+      vec2_dup(grass1.offset, global.input.mouse_world);
 
     layer_clear(&grass_layer);
     layer_clear(&player_layer);

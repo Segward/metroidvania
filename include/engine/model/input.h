@@ -9,6 +9,12 @@ typedef struct input
   bool right;
   bool up;
   bool down;
+
+  bool mouse_left;
+  bool mouse_right;
+
+  vec2 mouse_pos;
+  vec2 mouse_world;
 } input_t;
 
 void input_update(void);
