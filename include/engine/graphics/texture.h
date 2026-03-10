@@ -10,7 +10,14 @@ typedef struct texture_data
   int height;
 } texture_data_t;
 
-void texture_load_file(GLuint *tex, const char *path);
-void texture_make(GLuint *tex, texture_data_t *data);
+typedef struct texture
+{
+  GLuint id;
+  int width;
+  int height;
+} texture_t;
+
+void texture_load_file(texture_t *tex, const char *path);
+void texture_make(texture_t *tex, texture_data_t *data);
 
 #endif
