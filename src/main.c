@@ -1,97 +1,79 @@
 #include <engine/model/camera.h>
-#include <engine/model/layer.h>
 #include <engine/model/global.h>
 #include <engine/model/input.h>
 #include <engine/model/time.h>
 
 #include <engine/graphics/window.h>
-#include <engine/graphics/sprite.h>
+#include <engine/graphics/quad.h>
 #include <engine/graphics/texture.h>
-
-void camera_screen_to_world(vec2 out, vec2 screen, vec2 camera)
-{
-  float flipped_y = global.window.height - screen[1];
-
-  out[0] = screen[0] + camera[0] - global.window.width * 0.5f;
-  out[1] = flipped_y + camera[1] - global.window.height * 0.5f;
-}
 
 int main(void) 
 {
   window_init(800, 800, "test");
-  sprite_init();
+  quad_init();
   time_init();
 
-  texture_load_file(&global.texture.grass, "assets/textures/grass.jpg");
-  texture_load_file(&global.texture.player, "assets/textures/player.png");
+  GLuint tiles;
+  texture_load_file(&tiles, "assets/textures/tiles.png");
+  int width = 16;
+  int height = 12;
 
-  sprite_t grass1 = {
-    .offset = { -50.0f, 100.0f },
-    .size = { 50.0f, 50.0f },
-    .color = { 0.2f, 0.5f, 1.0f, 1.0f }
-  };
+  quad_t quads[2] = {0};
 
-  sprite_t grass2 = {
-    .offset = { 0.0f, 150.0f },
-    .size = { 50.0f, 50.0f },
-    .color = { 1.0f, 1.0f, 1.0f, 1.0f }
-  };
-  sprite_t player = {
-    .offset = { 0.0f, 0.0f },
-    .size = { 50.0f, 50.0f },
-    .color = { 1.0f, 1.0f, 1.0f, 1.0f }
-  };
+  float tile_w = 1.0f / width;
+  float tile_h = 1.0f / height;
 
-  layer_t grass_layer;
-  layer_t player_layer;
+  quads[0].offset[0] = 0.0f;
+  quads[0].offset[1] = 0.0f;
 
-  layer_make(&grass_layer, 0);
-  layer_make(&player_layer, 1);
+  quads[0].size[0] = 50.0f;
+  quads[0].size[1] = 50.0f;
+
+  quads[0].color[0] = 1.0f;
+  quads[0].color[1] = 1.0f;
+  quads[0].color[2] = 1.0f;
+  quads[0].color[3] = 1.0f;
+
+  quads[0].uv_offset[0] = 0 * tile_w;
+  quads[0].uv_offset[1] = 0 * tile_h;
+
+  quads[0].uv_size[0] = tile_w;
+  quads[0].uv_size[1] = tile_h;
+
+  quads[1].offset[0] = 50.0f;
+  quads[1].offset[1] = 0.0f;
+
+  quads[1].size[0] = 50.0f;
+  quads[1].size[1] = 50.0f;
+
+  quads[1].color[0] = 1.0f;
+  quads[1].color[1] = 1.0f;
+  quads[1].color[2] = 1.0f;
+  quads[1].color[3] = 1.0f;
+
+  quads[1].uv_offset[0] = 1 * tile_w;
+  quads[1].uv_offset[1] = 0 * tile_h;
+
+  quads[1].uv_size[0] = tile_w;
+  quads[1].uv_size[1] = tile_h;
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     time_update();
-    camera_update(player.offset);
-
-    if (global.input.left)
-      player.offset[0] -= global.time.delta * 200;
-
-    if (global.input.right)
-      player.offset[0] += global.time.delta * 200;
-
-    if (global.input.up)
-      player.offset[1] += global.time.delta * 200;
-
-    if (global.input.down)
-      player.offset[1] -= global.time.delta * 200;
-
-    if (global.input.mouse_left)
-      vec2_dup(grass1.offset, global.input.mouse_world);
-
-    layer_clear(&grass_layer);
-    layer_clear(&player_layer);
-
-    layer_push(&grass_layer, grass1, global.texture.grass);
-    layer_push(&grass_layer, grass2, global.texture.grass);
-    layer_push(&player_layer, player, global.texture.player);
+    camera_update((vec2){ 0.0f, 0.0f });
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    layer_draw(&grass_layer);
-    layer_draw(&player_layer);
- 
+    quad_draw(quads, tiles, 2);
+
     glfwSwapBuffers(global.window.handle);
     glfwPollEvents();
     input_update();
   }
 
-  layer_cleanup(&grass_layer);
-  layer_cleanup(&player_layer);
+  glDeleteTextures(1, &tiles);
 
-  glDeleteTextures(1, &global.texture.grass);
-  glDeleteTextures(1, &global.texture.player);
-
-  sprite_cleanup();
+  quad_cleanup();
   window_cleanup();
 
   return 0;
