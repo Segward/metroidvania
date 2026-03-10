@@ -13,6 +13,7 @@ int main(void)
   window_init(800, 800, "test");
   sprite_init();
   time_init();
+  camera_init((vec2){ 0.0f, 0.0f });
 
   texture_t tiles;
   texture_load_file(&tiles, "assets/textures/tiles.png");
@@ -22,24 +23,27 @@ int main(void)
 
   while (!glfwWindowShouldClose(global.window.handle)) {
     time_update();
-    camera_update((vec2){ 0.0f, 0.0f });
+    camera_update();
+
+    if (global.input.left)
+      global.camera.pos[0] -= global.time.delta * 200;
+
+    if (global.input.right)
+      global.camera.pos[0] += global.time.delta * 200;
+
+    if (global.input.down)
+      global.camera.pos[1] -= global.time.delta * 200;
+
+    if (global.input.up)
+      global.camera.pos[1] += global.time.delta * 200;
 
     sprite_batch_clear(&batch);
-
     sprite_batch_push(&batch, (sprite_t){
       .offset = { 0.0f, 0.0f },
-      .size = { 50.0f, 50.0f },
+      .size = { 500.0f, 500.0f },
       .color = { 1.0f, 1.0f, 1.0f, 1.0f },
       .atlas_start = { 0.0f, 0.0f },
-      .atlas_size = { 64.0f, 64.0f }
-    });
-
-    sprite_batch_push(&batch, (sprite_t){
-      .offset = { 50.0f, 0.0f },
-      .size = { 100.0f, 100.0f },
-      .color = { 1.0f, 1.0f, 1.0f, 1.0f },
-      .atlas_start = { 128.0f, 0.0f },
-      .atlas_size = { 128.0f, 128.0f }
+      .atlas_size = { tiles.width, tiles.height }
     });
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
