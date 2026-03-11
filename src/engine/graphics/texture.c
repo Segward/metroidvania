@@ -1,7 +1,5 @@
 #include <engine/graphics/texture.h>
 #include <engine/util/io.h>
-
-#define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
 static void texture_load_data(texture_data_t *out, const char *path)
