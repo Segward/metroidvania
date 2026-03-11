@@ -2,7 +2,7 @@
 #include <engine/model/global.h>
 #include <engine/model/input.h>
 #include <engine/model/time.h>
-#include <engine/model/sprite_batch.h>
+#include <engine/model/layer.h>
 
 #include <engine/graphics/window.h>
 #include <engine/graphics/sprite.h>
@@ -18,10 +18,11 @@ int main(void)
   texture_t tiles;
   texture_load_file(&tiles, "assets/textures/tiles.png");
 
-  sprite_batch_t batch;
-  sprite_batch_make(&batch, &tiles);
+  layer_t layer;
+  layer_make(&layer, &tiles);
 
-  while (!glfwWindowShouldClose(global.window.handle)) {
+  while (!glfwWindowShouldClose(global.window.handle)) 
+  {
     time_update();
     camera_update();
 
@@ -37,24 +38,27 @@ int main(void)
     if (global.input.up)
       global.camera.pos[1] += global.time.delta * 200;
 
-    sprite_batch_clear(&batch);
-    sprite_batch_push(&batch, (sprite_t){
-      .offset = { 0.0f, 0.0f },
-      .size = { 500.0f, 500.0f },
-      .color = { 1.0f, 1.0f, 1.0f, 1.0f },
-      .atlas_start = { 0.0f, 0.0f },
-      .atlas_size = { tiles.width, tiles.height }
-    });
+    if (global.input.mouse_left)
+    {
+      sprite_t *sprite = layer_make_sprite(&layer);
+      vec2_dup(sprite->offset, global.input.mouse_world);
+      vec2_dup(sprite->size, (vec2){ 50.0f, 50.0f });
+      vec4_dup(sprite->color, (vec4){ 1.0f, 1.0f, 1.0f, 1.0f });
+      vec2_dup(sprite->atlas_start, (vec2){ 0.0f, 0.0f });
+      vec2_dup(sprite->atlas_size, (vec2){ 64.0f, 64.0f });
+    }
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    sprite_batch_draw(&batch);
+    layer_draw(&layer);
 
     glfwSwapBuffers(global.window.handle);
     glfwPollEvents();
     input_update();
   }
+
+  layer_cleanup(&layer);
 
   glDeleteTextures(1, &tiles.id);
 
