@@ -1,16 +1,18 @@
 #include <pch.h>
 #include <engine/model/time.h>
-#include <engine/model/global.h>
+
+double time_last;
+double time_delta;
 
 void time_init(void)
 {
-  global.time.last = glfwGetTime();
-  global.time.delta = 0;
+  time_last = glfwGetTime();
+  time_delta = 0;
 }
 
 void time_update(void)
 {
   double now = glfwGetTime();
-  global.time.delta = now - global.time.last;
-  global.time.last = now;
+  time_delta = now - time_last;
+  time_last = now;
 }

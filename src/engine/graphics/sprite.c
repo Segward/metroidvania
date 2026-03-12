@@ -1,6 +1,7 @@
 #include <engine/graphics/sprite.h>
 #include <engine/graphics/shader.h>
-#include <engine/model/global.h>
+#include <engine/graphics/window.h>
+#include <engine/model/camera.h>
 
 static GLfloat vertices[] = {
   1.0f, 1.0f, 1.0f, 0.0f,
@@ -81,14 +82,11 @@ void sprite_init(void)
 
 void sprite_draw(sprite_t *sprites, texture_t *tex, GLsizei count)
 {
-  if (!sprites || !tex || count <= 0 || tex->id == 0)
-    return;
-
   glUseProgram(program);
   glBindVertexArray(vao);
 
-  glUniformMatrix4fv(u_proj, 1, GL_FALSE, &global.proj[0][0]);
-  glUniformMatrix4fv(u_view, 1, GL_FALSE, &global.view[0][0]);
+  glUniformMatrix4fv(u_proj, 1, GL_FALSE, &window_projection[0][0]);
+  glUniformMatrix4fv(u_view, 1, GL_FALSE, &camera_view[0][0]);
   glUniform2f(u_tex_size, (float)tex->width, (float)tex->height);
 
   glActiveTexture(GL_TEXTURE0);

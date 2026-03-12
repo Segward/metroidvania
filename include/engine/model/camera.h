@@ -3,12 +3,9 @@
 
 #include <pch.h>
 
-typedef struct camera
-{
-  vec2 pos;
-} camera_t;
-
-void camera_init(vec2 pos);
 void camera_update(void);
+
+extern vec2 camera_pos;
+extern mat4x4 camera_view;
 
 #endif
